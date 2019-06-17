@@ -9,5 +9,4 @@ public class HtmlgeneratorApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HtmlgeneratorApplication.class, args);
 	}
-
 }

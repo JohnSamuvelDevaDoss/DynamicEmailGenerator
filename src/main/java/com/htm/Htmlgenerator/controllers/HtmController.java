@@ -1,60 +1,100 @@
 package com.htm.Htmlgenerator.controllers;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HtmController {
 	
-	@PersistenceContext
-	private EntityManager entitymanager;
+	static { /* works fine! ! */
+	      System.setProperty("java.awt.headless", "false");
+	      System.out.println(java.awt.GraphicsEnvironment.isHeadless());
+	      /* ---> prints true */
+	    }
+	
+	@Autowired
+	Employee employee;
+	
+	public String updateAnswer(String customerId) {
+		
+		if(employee.getId()=="abc" && employee.isAnswerd() == false 
+				&& employee.getCount()<1) {
+			employee.setAnswerd(true);
+			employee.setCount(1);
+		}else {
+			employee.setAnswerd(false);
+			employee.setCount(0);
+		}
+		
+		return "Your Response Updated Thank you";
+	}
 
 	@RequestMapping( value = "{customerId}/getpage", method = RequestMethod.GET)
 	public @ResponseBody byte[] getLogin(@PathVariable String customerId) {
 		boolean userRepliedAlready = false;
-		int width = 250;
-        int height = 40;
         byte[] bytes = null;
+        
+        //we are updating the user response here because he opened his email
+        updateAnswer(customerId);
+        
         try {
         	
-        	if(entitymanager.find(Employee.class, customerId)!=null) {
-        		Employee person = entitymanager.find(Employee.class,customerId);
-        		userRepliedAlready = person.isAnswerd();
+        	if(employee.isAnswerd()) {
+        		userRepliedAlready = employee.isAnswerd();
     		}
- 
-        // Constructs a BufferedImage of one of the predefined image types.
-        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
- 
-        // Create a graphics which can be used to draw into the buffered image
-        Graphics2D g2d = bufferedImage.createGraphics();
-        g2d.setColor(Color.white);
-        g2d.fillRect(0, 0, width, height);
-		g2d.setColor(Color.black);
+ 		
+        	String html = "";
+        	 
+        if(userRepliedAlready == true) {
 
-        System.out.println(userRepliedAlready);
-		if(userRepliedAlready == true) {
-			//this text we can get it from chariot 
-			g2d.drawString("you already paid user", 10, 20);
+        	html = new String (Files.readAllBytes(Paths.get("C:\\Users\\johns\\Downloads\\Htmlgenerator\\src\\main\\resources\\PaidTemplate.html")));
 		}else {
-			g2d.drawString("you need to pay first", 10, 20);
-		}
-		
-		g2d.dispose();
+			html = new String (Files.readAllBytes(Paths.get("C:\\Users\\johns\\Downloads\\Htmlgenerator\\src\\main\\resources\\PayTemplate.html")));
+			}
+			System.out.println(html);
+			
+			int width = 400, height = 300;
+
+			
+			  BufferedImage image = GraphicsEnvironment.getLocalGraphicsEnvironment()
+			  .getDefaultScreenDevice().getDefaultConfiguration()
+			  .createCompatibleImage(width, height);
+			  
+			  Graphics graphics = image.createGraphics();
+			  graphics.setColor(Color.white);
+			  graphics.setFont(new Font("Purisa", Font.PLAIN, 13));
+			  graphics.fillRect(0, 0, width, height); 
+			  graphics.setColor(Color.black);
+			  
+			  JEditorPane jep = new JEditorPane("text/html", html); 
+			  jep.setSize(width,height); 
+			  jep.setBackground(Color.WHITE);
+			  jep.setForeground(Color.WHITE);
+			  jep.print(graphics);
+			 
+		    
+		    		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ImageIO.write(bufferedImage, "jpg", baos);
+		ImageIO.write(image, "jpg", baos);
 		 bytes = baos.toByteArray();
         }catch(Exception e) {
         	e.printStackTrace();

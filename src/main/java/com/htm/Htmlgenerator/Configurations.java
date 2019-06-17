@@ -7,24 +7,24 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
+
+import com.htm.Htmlgenerator.controllers.Employee;
 
 @EnableWebMvc
 @Configuration
 public class Configurations implements WebMvcConfigurer {
-
-	@Bean
-	public ViewResolver internalResourceViewResolver() {
-	    InternalResourceViewResolver bean = new InternalResourceViewResolver();
-	    //bean.setViewClass(JstlView.class);
-	    bean.setPrefix("/WEB-INF/views/");
-	    bean.setSuffix(".html");
-	    return bean;
-	}
 	
 	@Override
     public void configureDefaultServletHandling(
             DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     } 
+	
+	@Bean
+	public Employee getEmployee() {
+		Employee employee = new Employee();
+		employee.setId("abc");
+		employee.setAnswerd(false);
+		return employee;
+	}
 }

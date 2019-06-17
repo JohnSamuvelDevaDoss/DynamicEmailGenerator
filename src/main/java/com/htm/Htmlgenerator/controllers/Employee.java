@@ -1,26 +1,15 @@
 package com.htm.Htmlgenerator.controllers;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+public class Employee {
 
-	@Entity
-	@Table(name="employee")
-	public class Employee {
-
-	@Id
-	@Column(name="Id")
 	private String id;
 
-	@Column(name="name")
 	private String name;
+	
+	private int count;
 
-	@Column(name="answerd")
 	private boolean answerd;
 
-
-	
 	
 	public String getId() {
 		return id;
@@ -33,6 +22,12 @@ import javax.persistence.Table;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
 	}
 	public boolean isAnswerd() {
 		return answerd;

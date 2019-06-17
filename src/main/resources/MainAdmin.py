@@ -7,9 +7,9 @@ port = 465  # For SSL
 password ="Johndeva@1995"
 
 sender_email = "johnoutlook1995@gmail.com"
-receiver_email = "johnsamuveld@gmail.com"
+receiver_email = "johnsamuveldeva@hotmail.com"
 message = MIMEMultipart()
-message["Subject"] = "multipart test"
+message["Subject"] = "Dynamic Email Testing"
 message["From"] = sender_email
 message["To"] = receiver_email
 
@@ -17,14 +17,27 @@ message["To"] = receiver_email
 text = ""
 html = """\
 <html>
-  <body>
-    <p>Hi,<br>
-       How are you?<br> 
-       has many great tutorials.
-    </p>
-      <img src="https://e8f90b8a.ngrok.io/api/getpage"/>
-     
-  </body>
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+<div class="row">
+    <div class="col-sm-3">
+<img src="https://cdn.pixabay.com/photo/2016/04/15/18/05/computer-1331579_960_720.png" style="
+    width: 200;
+    height: 200;margin-top: 50;
+"/>
+</div>
+    <div class="col-sm-3">
+    <img src="https://301fcf04.ngrok.io/api/abc/getpage"/>
+    </div>
+</div>
+</div>
+</body>
 </html>
 """
 
